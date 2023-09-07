@@ -4,33 +4,45 @@ const Button = ({ handleClick, text }) => {
   return <button onClick={handleClick}>{text}</button>;
 };
 
+const StatisticLine = ({ text, value }) => {
+  return (
+    <tr>
+      <td>
+        <strong>
+          {text}: {value}
+        </strong>
+      </td>
+    </tr>
+  );
+};
+
 const Statistics = ({ good, bad, neutral, total }) => {
   const calculateAverage = (a, b, c) => (a - b) / c;
-  const average = calculateAverage(good, bad, total);
+  const average = calculateAverage(good, bad, total).toFixed(6);
 
   const calculatePositive = (a, b) => (a * 100) / b;
-  const positive = calculatePositive(good, total);
+  const positive = `${calculatePositive(good, total).toFixed(6)}%`;
 
   if (good === 0 && neutral === 0 && bad === 0) {
     return <h3>No feedback given</h3>;
   }
 
   return (
-    <div>
-      <h1>statistics</h1>
-      <p>Good: {good}</p>
-      <p>Neutral: {neutral}</p>
-      <p>Bad: {bad}</p>
-      <p>
-        <strong>Total: {total}</strong>
-      </p>
-      <p>
-        <strong>Average: {isNaN(average) ? 0 : average}</strong>
-      </p>
-      <p>
-        <strong>Positive: {isNaN(positive) ? 0 : positive} %</strong>
-      </p>
-    </div>
+    <table>
+      <thead>
+        <tr>
+          <th>STATISTICS</th>
+        </tr>
+      </thead>
+      <tbody>
+        <StatisticLine text="Good" value={good} />
+        <StatisticLine text="Neutral" value={neutral} />
+        <StatisticLine text="Bad" value={bad} />
+        <StatisticLine text="Total" value={total} />
+        <StatisticLine text="Average" value={average} />
+        <StatisticLine text="Positive" value={positive} />
+      </tbody>
+    </table>
   );
 };
 
@@ -49,7 +61,7 @@ function App() {
 
   return (
     <div>
-      <h1>give feedback</h1>
+      <h1>Give feedback</h1>
       <Button handleClick={handleGood} text="Good" />
       <Button handleClick={handleNeutral} text="Neutral" />
       <Button handleClick={handleBad} text="Bad" />
